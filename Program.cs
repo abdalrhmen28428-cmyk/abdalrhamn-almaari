@@ -1,57 +1,71 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System.Data;
-
-class person
+class Person
 {
     public string Name { get; set; }
-    public virtual void DisplayInf()
+    public string Email { get; set; }
+    public Person(string name, string email)
     {
-        Console.WriteLine(Name);
+        Name = name;
+        Email = email;
+        Console.WriteLine("[Constructot]Person executed.");
     }
-}
-    class Student : person
+    public void DisplayBasicInf()
+    {
+        Console.WriteLine($"Name:{Name}|Email:{Email}");
+    }
+    class Student : Person
     {
         public int StudentId { get; set; }
-        public override void DisplayInf()
+        public double GPA { get; set; }
+        public Student(string name, string email, int studentId, double gpa)
+            : base(name, email)
         {
-            Console.WriteLine(Name + "  " + StudentId);
+            StudentId = studentId;
+            GPA = gpa;
+            Console.WriteLine("[Constructot]Person executed.");
         }
     }
-    class Employee : person
+    class Employee : Person
     {
+        public int EmployeeId { get; set; }
         public double Salary { get; set; }
-        public override void DisplayInf()
+        public Employee(string name, string email, int employeeId, double salary)
+            : base(name, email)
         {
-            Console.WriteLine(Name + "  " + Salary);
+
+            EmployeeId = employeeId;
+            Salary = salary;
+            Console.WriteLine("[Constructor Employee executed.");
+        }
+        class Teacher : Employee
+        {
+            public string CourseName { get; set; }
+            public Teacher(string name, string email, int employeeId, double salary, string courseName)
+                : base(name, email, employeeId, salary)
+            {
+                CourseName = courseName;
+                Console.WriteLine("[Constructor Employee executed.");
+            }
+            public void Teach()
+            {
+                Console.WriteLine($"Teaching Course:{CourseName}");
+            }
         }
 
-    }
-class Teacher : person
-{
-    public string CourseName { get; set; }
-
-    public override void DisplayInf()
-    {
-        Console.WriteLine(Name + "   " + CourseName);
-    }
-}
         class Program
         {
-            static void ShowInfo(person person)
+            static void Main(string[] args)
             {
-                person.DisplayInf();
-            }
-            static void Main()
-            {
-                List<person> people = new List<person>();
-                people.Add(new Student { Name = "Ahmed", StudentId = 101 });
-                people.Add(new Employee { Name = "Ali", Salary  = 5000 });
-                people.Add(new Teacher  { Name = "Mohammd", CourseName = "programming" });
-                foreach (person person in people)
-                {
-                    person.DisplayInf();
-                    Console.WriteLine(person.GetType());
-                }
+                Console.WriteLine("=== Creating student object ===");
+                Student student = new Student("Ali Hassan ", "ali@univ.edu", 2024001, 3085);
+                student.DisplayBasicInf();
+                Console.WriteLine($"Student ID:{student.StudentId},GPA:{student.GPA}");
+                Console.WriteLine("\n===Creating Teacher object ===");
+                Teacher teacher = new Teacher("Dr.Ahmed", "ahmed@univ.edu", 5001, 7500.00, "programming");
+                teacher.DisplayBasicInf();
+                teacher.Teach();
+                Console.ReadKey();
             }
         }
-    
+    }
+}
